@@ -1,0 +1,14 @@
+[
+    {
+        "id": "case-01",
+        "jd": "We are looking for a Software Engineer with experience in JavaScript, Node.js, REST APIs and MongoDB. The candidate should be able to build backend services and work with a development team.",
+        "company_url": "https://www.microsoft.com",
+        "days": 3
+    },
+    {
+        "id": "case-02",
+        "jd": "Looking for a React developer with JavaScript, React and CSS experience. The candidate should build responsive user interfaces and work with APIs.",
+        "company_url": "https://www.microsoft.com",
+        "days": 5
+    }
+]

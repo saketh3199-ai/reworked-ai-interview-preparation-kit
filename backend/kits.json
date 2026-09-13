@@ -1,0 +1,460 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-09-12T15:41:02.746Z",
+  "kits": [
+    {
+      "id": "case-01",
+      "status": "ok",
+      "kit": {
+        "source": {
+          "company": "Microsoft – AI, Cloud, Productivity, Computing, Gaming & Apps",
+          "company_url": "https://www.microsoft.com",
+          "role": "Software Engineer",
+          "location": "",
+          "jd_chars": 190,
+          "researched_at": "2026-09-12T15:39:50.687Z",
+          "pages_used": [
+            "https://www.microsoft.com/",
+            "https://www.microsoft.com/about",
+            "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage",
+            "https://www.microsoft.com/en-in/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook",
+            "https://www.microsoft.com/en-in/microsoft-365/onenote/digital-note-taking-app",
+            "https://www.microsoft.com/en-in/accessories"
+          ],
+          "jd": "We are looking for a Software Engineer with experience in JavaScript, Node.js, REST APIs and MongoDB. The candidate should be able to build backend services and work with a development team."
+        },
+        "company_brief": {
+          "summary": "Microsoft is a global technology company whose mission is to empower every person and organization on the planet to achieve more. It offers a broad portfolio of software, cloud services, AI solutions, hardware, and gaming experiences, emphasizing productivity, security, sustainability, and digital inclusion.",
+          "what_they_do": "Microsoft provides cloud platforms (Azure, Azure Copilot), productivity suites (Microsoft 365, Outlook, OneDrive, Teams, OneNote, Word, Excel, PowerPoint), AI assistants (Microsoft Copilot across apps), operating systems (Windows 11, Windows 365), hardware devices (Surface laptops, tablets, PCs, accessories, Xbox consoles, HoloLens), gaming services (Xbox Game Pass Ultimate, Xbox games), business applications (Dynamics 365, Power Platform, Azure Security, Microsoft Security), developer tools (Visual Studio, Microsoft Learn, Microsoft Marketplace), and support services (technical support, warranty, repair, education resources).",
+          "sources": [
+            "https://www.microsoft.com/",
+            "https://www.microsoft.com/about",
+            "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage",
+            "https://www.microsoft.com/en-in/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook",
+            "https://www.microsoft.com/en-in/microsoft-365/onenote/digital-note-taking-app",
+            "https://www.microsoft.com/en-in/accessories"
+          ]
+        },
+        "role": {
+          "title": "Software Engineer",
+          "seniority": "Not specified",
+          "responsibilities": [
+            "Build backend services",
+            "Work with a development team"
+          ],
+          "requirements": [
+            {
+              "id": "r1",
+              "text": "Experience with JavaScript",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "r2",
+              "text": "Experience with Node.js",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "r3",
+              "text": "Experience with REST APIs",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "r4",
+              "text": "Experience with MongoDB",
+              "kind": "technical",
+              "priority": "must"
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "q1",
+            "requirement_ids": [
+              "r1"
+            ],
+            "category": "technical",
+            "prompt": "Can you explain the differences between `var`, `let`, and `const` in JavaScript and when you would choose each?",
+            "answer_outline": "• Scope differences (function vs block) • Hoisting behavior • Reassignment vs mutation • Temporal dead zone for let/const • Best practices: const for constants, let for mutable variables, avoid var unless legacy code",
+            "difficulty": 1
+          },
+          {
+            "id": "q2",
+            "requirement_ids": [
+              "r2"
+            ],
+            "category": "technical",
+            "prompt": "Describe how the Node.js event loop works and how it handles asynchronous I/O operations.",
+            "answer_outline": "• Single‑threaded JavaScript execution • Phases of the event loop (timers, pending callbacks, poll, check, close) • Non‑blocking I/O delegated to libuv thread pool • Callbacks/promises queued in appropriate phase • Impact on CPU‑bound vs I/O‑bound tasks",
+            "difficulty": 2
+          },
+          {
+            "id": "q3",
+            "requirement_ids": [
+              "r2",
+              "r3"
+            ],
+            "category": "technical",
+            "prompt": "Design a simple RESTful API for a todo list using Node.js and Express. What HTTP methods and status codes would you use for each operation?",
+            "answer_outline": "• Resources: /todos, /todos/:id • GET (list, single) → 200, 404 if not found • POST (create) → 201 with Location header • PUT/PATCH (update) → 200/204, 404 if missing • DELETE → 204, 404 if missing • Validation, error handling, middleware for JSON parsing, use of async/await",
+            "difficulty": 2
+          },
+          {
+            "id": "q4",
+            "requirement_ids": [
+              "r4"
+            ],
+            "category": "technical",
+            "prompt": "What are the key considerations when designing a MongoDB schema for a high‑read, low‑write application?",
+            "answer_outline": "• Embedding vs referencing (favor embedding for read‑heavy) • Index selection (single field, compound, covered queries) • Use of appropriate data types (ObjectId, dates) • Avoid large documents (>16 MB) • Sharding strategy if scaling needed • Read preferences and replica set configuration",
+            "difficulty": 2
+          },
+          {
+            "id": "q5",
+            "requirement_ids": [
+              "r2",
+              "r3",
+              "r4"
+            ],
+            "category": "technical",
+            "prompt": "Walk me through how you would implement a CRUD REST API in Node.js that stores data in MongoDB. Include error handling and response structure.",
+            "answer_outline": "• Set up Express server, body‑parser middleware • Connect to MongoDB with Mongoose or native driver • Define Mongoose schema/model • Implement routes: GET /items, GET /items/:id, POST /items, PUT /items/:id, DELETE /items/:id • Use async/await with try/catch for errors • Return proper status codes (200, 201, 204, 400, 404, 500) • Validation (Mongoose validators or Joi) • Centralized error‑handling middleware",
+            "difficulty": 3
+          },
+          {
+            "id": "q6",
+            "requirement_ids": [
+              "r1"
+            ],
+            "category": "behavioural",
+            "prompt": "Tell me about a time you had to debug a difficult JavaScript issue in production. What was the problem and how did you resolve it?",
+            "answer_outline": "• Context: production environment, impact on users • Symptom (e.g., intermittent crash, wrong data) • Investigation steps: logs, source‑maps, Chrome DevTools, reproducing locally • Root cause (e.g., closure over mutable variable, async race) • Fix applied (code change, added guard, refactor) • Verification and post‑mortem actions (monitoring, tests)",
+            "difficulty": 2
+          },
+          {
+            "id": "q7",
+            "requirement_ids": [
+              "r4"
+            ],
+            "category": "domain",
+            "prompt": "When starting a new microservice, how would you decide whether to use MongoDB or a relational database? Discuss the factors you would evaluate.",
+            "answer_outline": "• Data model complexity (hierarchical, flexible schema → MongoDB) • Transactional requirements (strong ACID → relational) • Query patterns (ad‑hoc joins vs document‑oriented reads) • Scalability & sharding needs • Consistency guarantees • Operational expertise and ecosystem • Cost and licensing considerations",
+            "difficulty": 2
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "f1",
+            "front": "Can you explain the differences between `var`, `let`, and `const` in JavaScript and when you would choose each?",
+            "back": "• Scope differences (function vs block) • Hoisting behavior • Reassignment vs mutation • Temporal dead zone for let/const • Best practices: const for constants, let for mutable variables, avoid var unless legacy code",
+            "requirement_ids": [
+              "r1"
+            ]
+          },
+          {
+            "id": "f2",
+            "front": "Describe how the Node.js event loop works and how it handles asynchronous I/O operations.",
+            "back": "• Single‑threaded JavaScript execution • Phases of the event loop (timers, pending callbacks, poll, check, close) • Non‑blocking I/O delegated to libuv thread pool • Callbacks/promises queued in appropriate phase • Impact on CPU‑bound vs I/O‑bound tasks",
+            "requirement_ids": [
+              "r2"
+            ]
+          },
+          {
+            "id": "f3",
+            "front": "Design a simple RESTful API for a todo list using Node.js and Express. What HTTP methods and status codes would you use for each operation?",
+            "back": "• Resources: /todos, /todos/:id • GET (list, single) → 200, 404 if not found • POST (create) → 201 with Location header • PUT/PATCH (update) → 200/204, 404 if missing • DELETE → 204, 404 if missing • Validation, error handling, middleware for JSON parsing, use of async/await",
+            "requirement_ids": [
+              "r2",
+              "r3"
+            ]
+          },
+          {
+            "id": "f4",
+            "front": "What are the key considerations when designing a MongoDB schema for a high‑read, low‑write application?",
+            "back": "• Embedding vs referencing (favor embedding for read‑heavy) • Index selection (single field, compound, covered queries) • Use of appropriate data types (ObjectId, dates) • Avoid large documents (>16 MB) • Sharding strategy if scaling needed • Read preferences and replica set configuration",
+            "requirement_ids": [
+              "r4"
+            ]
+          },
+          {
+            "id": "f5",
+            "front": "Walk me through how you would implement a CRUD REST API in Node.js that stores data in MongoDB. Include error handling and response structure.",
+            "back": "• Set up Express server, body‑parser middleware • Connect to MongoDB with Mongoose or native driver • Define Mongoose schema/model • Implement routes: GET /items, GET /items/:id, POST /items, PUT /items/:id, DELETE /items/:id • Use async/await with try/catch for errors • Return proper status codes (200, 201, 204, 400, 404, 500) • Validation (Mongoose validators or Joi) • Centralized error‑handling middleware",
+            "requirement_ids": [
+              "r2",
+              "r3",
+              "r4"
+            ]
+          },
+          {
+            "id": "f6",
+            "front": "Tell me about a time you had to debug a difficult JavaScript issue in production. What was the problem and how did you resolve it?",
+            "back": "• Context: production environment, impact on users • Symptom (e.g., intermittent crash, wrong data) • Investigation steps: logs, source‑maps, Chrome DevTools, reproducing locally • Root cause (e.g., closure over mutable variable, async race) • Fix applied (code change, added guard, refactor) • Verification and post‑mortem actions (monitoring, tests)",
+            "requirement_ids": [
+              "r1"
+            ]
+          },
+          {
+            "id": "f7",
+            "front": "When starting a new microservice, how would you decide whether to use MongoDB or a relational database? Discuss the factors you would evaluate.",
+            "back": "• Data model complexity (hierarchical, flexible schema → MongoDB) • Transactional requirements (strong ACID → relational) • Query patterns (ad‑hoc joins vs document‑oriented reads) • Scalability & sharding needs • Consistency guarantees • Operational expertise and ecosystem • Cost and licensing considerations",
+            "requirement_ids": [
+              "r4"
+            ]
+          }
+        ],
+        "schedule": {
+          "days_available": 3,
+          "days": [
+            {
+              "day": 1,
+              "focus": "Practice 3 questions",
+              "question_ids": [
+                "q5",
+                "q4",
+                "q1"
+              ],
+              "minutes": 120
+            },
+            {
+              "day": 2,
+              "focus": "Practice 2 questions",
+              "question_ids": [
+                "q3",
+                "q6"
+              ],
+              "minutes": 120
+            },
+            {
+              "day": 3,
+              "focus": "Practice 2 questions",
+              "question_ids": [
+                "q2",
+                "q7"
+              ],
+              "minutes": 120
+            }
+          ]
+        },
+        "coverage": {
+          "uncovered_requirement_ids": [],
+          "passes": 1
+        }
+      },
+      "error": null
+    },
+    {
+      "id": "case-02",
+      "status": "ok",
+      "kit": {
+        "source": {
+          "company": "Microsoft – AI, Cloud, Productivity, Computing, Gaming & Apps",
+          "company_url": "https://www.microsoft.com",
+          "role": "React Developer",
+          "location": "",
+          "jd_chars": 146,
+          "researched_at": "2026-09-12T15:41:02.746Z",
+          "pages_used": [
+            "https://www.microsoft.com/",
+            "https://www.microsoft.com/about",
+            "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage",
+            "https://www.microsoft.com/en-in/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook",
+            "https://www.microsoft.com/en-in/microsoft-365/onenote/digital-note-taking-app",
+            "https://www.microsoft.com/en-in/accessories"
+          ],
+          "jd": "Looking for a React developer with JavaScript, React and CSS experience. The candidate should build responsive user interfaces and work with APIs."
+        },
+        "company_brief": {
+          "summary": "Microsoft is a global technology company whose mission is to empower every person and every organization on the planet to achieve more. It offers a broad portfolio that spans AI, cloud computing, productivity software, operating systems, hardware, gaming, and developer tools, while emphasizing security, sustainability, and digital inclusion.",
+          "what_they_do": "Microsoft provides cloud services (Azure, Azure Copilot), AI solutions (Microsoft AI, Copilot across apps), productivity and collaboration software (Microsoft 365, Outlook, Teams, OneDrive, OneNote, Word, Excel, PowerPoint), business applications (Dynamics 365, Power Platform, Microsoft 365 for business), operating systems (Windows 11, Windows 365), hardware devices (Surface laptops, Surface Pro, Surface Hub, Xbox consoles, accessories, HoloLens), gaming services (Xbox Game Pass Ultimate, Xbox games), developer tools (Visual Studio, Microsoft Learn, Microsoft Developer, Microsoft Marketplace), security solutions (Microsoft Security, ransomware detection, end‑to‑end encryption), and support services (Microsoft Support, warranty and repair, community forums).",
+          "sources": [
+            "https://www.microsoft.com/",
+            "https://www.microsoft.com/about",
+            "https://www.microsoft.com/en-in/microsoft-365/onedrive/online-cloud-storage",
+            "https://www.microsoft.com/en-in/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook",
+            "https://www.microsoft.com/en-in/microsoft-365/onenote/digital-note-taking-app",
+            "https://www.microsoft.com/en-in/accessories"
+          ]
+        },
+        "role": {
+          "title": "React Developer",
+          "seniority": "Not specified",
+          "responsibilities": [
+            "Build responsive user interfaces",
+            "Work with APIs"
+          ],
+          "requirements": [
+            {
+              "id": "r1",
+              "text": "JavaScript experience",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "r2",
+              "text": "React experience",
+              "kind": "technical",
+              "priority": "must"
+            },
+            {
+              "id": "r3",
+              "text": "CSS experience",
+              "kind": "technical",
+              "priority": "must"
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "q1",
+            "requirement_ids": [
+              "r1"
+            ],
+            "category": "technical",
+            "prompt": "Explain the difference between `var`, `let`, and `const` in JavaScript, and give an example of a situation where using `let` is preferred over `var`.",
+            "answer_outline": "• Scope differences: function vs block scope. • Hoisting behavior for each. • Reassignment rules (const immutable binding). • Example: loop index with `let` to avoid closure capture issues in asynchronous callbacks.",
+            "difficulty": 2
+          },
+          {
+            "id": "q2",
+            "requirement_ids": [
+              "r2"
+            ],
+            "category": "technical",
+            "prompt": "Describe how React's Hooks API replaces class component lifecycle methods. Provide a code snippet that uses `useEffect` to fetch data when a component mounts.",
+            "answer_outline": "• Explanation of functional components + Hooks. • Mapping of componentDidMount, componentDidUpdate, componentWillUnmount to useEffect dependencies. • Example code with empty dependency array for mount‑only fetch, cleanup function if needed.",
+            "difficulty": 2
+          },
+          {
+            "id": "q3",
+            "requirement_ids": [
+              "r3"
+            ],
+            "category": "technical",
+            "prompt": "How would you create a responsive two‑column layout that collapses to a single column on mobile devices using modern CSS?",
+            "answer_outline": "• Use CSS Grid or Flexbox. • Define columns with `grid-template-columns: 1fr 1fr;` (or flex). • Media query at breakpoint (e.g., 768px) to change to `1fr`. • Mention gap, alignment, and mobile‑first approach.",
+            "difficulty": 2
+          },
+          {
+            "id": "q4",
+            "requirement_ids": [
+              "r1",
+              "r2"
+            ],
+            "category": "technical",
+            "prompt": "Write a small React component in JavaScript that fetches a list of users from an API endpoint (`/api/users`) when it mounts, displays the names in a list, and shows a loading indicator while the request is in progress. Explain your implementation choices.",
+            "answer_outline": "• Functional component with `useState` for data, loading, error. • `useEffect` with empty dependency array to trigger fetch on mount. • Async fetch using `fetch`/`await`, error handling with try/catch. • Conditional rendering: loading spinner, error message, or `<ul>` of names. • Reasoning about cleanup (abort controller) and why JavaScript async/await is used.",
+            "difficulty": 3
+          },
+          {
+            "id": "q5",
+            "requirement_ids": [
+              "r2",
+              "r3"
+            ],
+            "category": "behavioural",
+            "prompt": "Tell me about a time you worked with a designer to turn a mockup into a production‑ready UI using React and CSS. What challenges did you face and how did you resolve them?",
+            "answer_outline": "• Context of project and collaboration. • How the mockup was translated into React components. • CSS techniques used (Flexbox/Grid, CSS Modules, styled‑components). • Challenges such as pixel‑perfect fidelity, cross‑browser issues, or responsive breakpoints. • Communication steps, iteration, and final outcome.",
+            "difficulty": 1
+          }
+        ],
+        "flashcards": [
+          {
+            "id": "f1",
+            "front": "Explain the difference between `var`, `let`, and `const` in JavaScript, and give an example of a situation where using `let` is preferred over `var`.",
+            "back": "• Scope differences: function vs block scope. • Hoisting behavior for each. • Reassignment rules (const immutable binding). • Example: loop index with `let` to avoid closure capture issues in asynchronous callbacks.",
+            "requirement_ids": [
+              "r1"
+            ]
+          },
+          {
+            "id": "f2",
+            "front": "Describe how React's Hooks API replaces class component lifecycle methods. Provide a code snippet that uses `useEffect` to fetch data when a component mounts.",
+            "back": "• Explanation of functional components + Hooks. • Mapping of componentDidMount, componentDidUpdate, componentWillUnmount to useEffect dependencies. • Example code with empty dependency array for mount‑only fetch, cleanup function if needed.",
+            "requirement_ids": [
+              "r2"
+            ]
+          },
+          {
+            "id": "f3",
+            "front": "How would you create a responsive two‑column layout that collapses to a single column on mobile devices using modern CSS?",
+            "back": "• Use CSS Grid or Flexbox. • Define columns with `grid-template-columns: 1fr 1fr;` (or flex). • Media query at breakpoint (e.g., 768px) to change to `1fr`. • Mention gap, alignment, and mobile‑first approach.",
+            "requirement_ids": [
+              "r3"
+            ]
+          },
+          {
+            "id": "f4",
+            "front": "Write a small React component in JavaScript that fetches a list of users from an API endpoint (`/api/users`) when it mounts, displays the names in a list, and shows a loading indicator while the request is in progress. Explain your implementation choices.",
+            "back": "• Functional component with `useState` for data, loading, error. • `useEffect` with empty dependency array to trigger fetch on mount. • Async fetch using `fetch`/`await`, error handling with try/catch. • Conditional rendering: loading spinner, error message, or `<ul>` of names. • Reasoning about cleanup (abort controller) and why JavaScript async/await is used.",
+            "requirement_ids": [
+              "r1",
+              "r2"
+            ]
+          },
+          {
+            "id": "f5",
+            "front": "Tell me about a time you worked with a designer to turn a mockup into a production‑ready UI using React and CSS. What challenges did you face and how did you resolve them?",
+            "back": "• Context of project and collaboration. • How the mockup was translated into React components. • CSS techniques used (Flexbox/Grid, CSS Modules, styled‑components). • Challenges such as pixel‑perfect fidelity, cross‑browser issues, or responsive breakpoints. • Communication steps, iteration, and final outcome.",
+            "requirement_ids": [
+              "r2",
+              "r3"
+            ]
+          }
+        ],
+        "schedule": {
+          "days_available": 5,
+          "days": [
+            {
+              "day": 1,
+              "focus": "Practice 1 questions",
+              "question_ids": [
+                "q4"
+              ],
+              "minutes": 120
+            },
+            {
+              "day": 2,
+              "focus": "Practice 1 questions",
+              "question_ids": [
+                "q5"
+              ],
+              "minutes": 120
+            },
+            {
+              "day": 3,
+              "focus": "Practice 1 questions",
+              "question_ids": [
+                "q1"
+              ],
+              "minutes": 120
+            },
+            {
+              "day": 4,
+              "focus": "Practice 1 questions",
+              "question_ids": [
+                "q2"
+              ],
+              "minutes": 120
+            },
+            {
+              "day": 5,
+              "focus": "Practice 1 questions",
+              "question_ids": [
+                "q3"
+              ],
+              "minutes": 120
+            }
+          ]
+        },
+        "coverage": {
+          "uncovered_requirement_ids": [],
+          "passes": 1
+        }
+      },
+      "error": null
+    }
+  ]
+}
