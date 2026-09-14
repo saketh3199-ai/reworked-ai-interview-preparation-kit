@@ -3,7 +3,7 @@ import { createApi,fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseQuery = fetchBaseQuery
 (
     {
-        baseUrl: "https://reworked-ai-interview-preparation-kit.onrender.com/api",
+        baseUrl: import.meta.env.VITE_API_URL,
 
         prepareHeaders: (headers) =>
         {

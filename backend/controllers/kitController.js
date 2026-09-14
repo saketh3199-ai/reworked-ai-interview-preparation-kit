@@ -356,3 +356,25 @@ export const regenerateQuestions = async (req,res) =>
 //and generating new questions. But while generating new questions, because id conflict might happen, 
 //we are dealing with that
 };
+
+
+export const deleteKit = async (req,res) =>
+{
+    try
+    {
+        const kit = await Kit.findOneAndDelete({_id: req.params.id,user: req.user});
+
+        if (!kit)
+        {
+            return res.status(404).json({message: "Kit not found"});
+        }
+
+        res.json({message: "Kit deleted successfully",kitId: kit._id});
+    }
+    catch (error)
+    {
+        console.error("Delete Kit error:",error);
+
+        res.status(500).json({message: "Server error"});
+    }
+};

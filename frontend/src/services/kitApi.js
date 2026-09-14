@@ -86,6 +86,18 @@ export const kitApi = api.injectEndpoints
                     ]
                 }
             ),
+            deleteKit: builder.mutation
+            (
+                {
+                    query: (kitId) =>
+                    ({
+                        url: `/kits/${kitId}`,
+                        method: "DELETE"
+                    }),
+
+                    invalidatesTags: ["Kit"]
+                }
+            ),
         })
     }
 );
@@ -95,6 +107,7 @@ export const {
     useGetKitQuery,
     useCreateKitMutation,
     useUpdateKitMutation,
+    useDeleteKitMutation,
     useRegenerateQuestionsMutation,
     useUpdatePracticeMutation
 } = kitApi;
