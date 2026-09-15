@@ -1,9 +1,10 @@
-
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { logout } from "../features/auth/authSlice";
-import { useGetKitsQuery,useDeleteKitMutation } from "../services/kitApi";
+import { useGetKitsQuery, useDeleteKitMutation } from "../services/kitApi";
+import { api } from "../services/api";
 
 const NAV_ITEMS = [
     { label: "Overview", key: "overview" },
@@ -18,26 +19,51 @@ const Dashboard = () =>
     const navigate = useNavigate();
 
     const { user } = useSelector((state) => state.auth);
-    const { data,isLoading,isError } = useGetKitsQuery();
-    const [deleteKit] = useDeleteKitMutation();
+
+    const
+    {
+        data,
+        isLoading,
+        isError,
+        refetch
+    } = useGetKitsQuery();
+
+    const
+    [
+        deleteKit,
+        { isLoading: isDeleting }
+    ] = useDeleteKitMutation();
+
+    const [deletingKitId, setDeletingKitId] = useState(null);
+    const [deleteError, setDeleteError] = useState("");
 
     const kits = Array.isArray(data) ? data : data?.kits || [];
-    const initial = (user?.name || user?.email || "C").charAt(0).toUpperCase();
 
-    const handleLogout = () =>
-    {
-        dispatch(logout());
-        navigate("/login");
-    };
+    const initial =
+        (user?.name || user?.email || "C")
+            .charAt(0)
+            .toUpperCase();
 
+   const handleLogout = () =>
+{
+    dispatch(logout());
+    dispatch(api.util.resetApiState());
+
+    navigate("/login");
+};
     const handleDeleteKit = async (kitId) =>
     {
-        const confirmed = window.confirm("Are you sure you want to delete this preparation kit?");
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this preparation kit? This cannot be undone."
+        );
 
         if (!confirmed)
         {
             return;
         }
+
+        setDeleteError("");
+        setDeletingKitId(kitId);
 
         try
         {
@@ -45,8 +71,16 @@ const Dashboard = () =>
         }
         catch (error)
         {
-            console.error("Delete Kit error:",error);
-            alert("Unable to delete the preparation kit.");
+            console.error("Delete Kit error:", error);
+
+            setDeleteError(
+                error?.data?.message ||
+                "Unable to delete the preparation kit."
+            );
+        }
+        finally
+        {
+            setDeletingKitId(null);
         }
     };
 
@@ -68,7 +102,7 @@ const Dashboard = () =>
                     </div>
 
                     <nav className="mt-10 hidden flex-col gap-1 lg:flex">
-                        {NAV_ITEMS.map((item,i) => (
+                        {NAV_ITEMS.map((item, i) => (
                             <button
                                 key={item.key}
                                 className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors ${
@@ -106,7 +140,6 @@ const Dashboard = () =>
                     </button>
                 </div>
 
-                {/* Mobile top bar content collapses into this row */}
                 <div className="flex items-center justify-between lg:hidden">
                     <span className="text-xs text-stone-500">
                         {user?.name || user?.email || "Candidate"}
@@ -114,7 +147,7 @@ const Dashboard = () =>
 
                     <button
                         onClick={handleLogout}
-                        className="text-xs text-stone-500 hover:text-amber-400"
+                        className="text-xs text-stone-500 transition-colors hover:text-amber-400"
                     >
                         Logout
                     </button>
@@ -124,12 +157,11 @@ const Dashboard = () =>
             {/* MAIN */}
             <main className="flex-1 px-6 py-10 sm:px-10 lg:px-14 lg:py-14">
 
-                {/* Hero row */}
+                {/* Hero */}
                 <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
                     <div className="max-w-xl">
                         <p className="font-mono text-xs uppercase tracking-widest text-stone-500">
-                            {new Date().toLocaleDateString
-                            (
+                            {new Date().toLocaleDateString(
                                 undefined,
                                 {
                                     weekday: "long",
@@ -156,7 +188,7 @@ const Dashboard = () =>
                     </button>
                 </div>
 
-                {/* Bento stats */}
+                {/* Stats */}
                 <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
 
                     <div className="col-span-2 rounded-2xl bg-stone-950 p-6 text-stone-50 sm:col-span-1">
@@ -186,12 +218,13 @@ const Dashboard = () =>
                         </p>
 
                         <p className="mt-3 font-serif text-2xl text-stone-900">
-                            {kits.reduce
-                            (
-                                (sum,k) =>
-                                sum + (k.kit?.questions?.length || 0),
-                                0
-                            )}
+                            {isLoading || isError
+                                ? "–"
+                                : kits.reduce(
+                                    (sum, kit) =>
+                                        sum + (kit.kit?.questions?.length || 0),
+                                    0
+                                )}
                         </p>
                     </div>
 
@@ -209,24 +242,39 @@ const Dashboard = () =>
                 {/* Kit list */}
                 <div className="mt-12">
 
-                    <div className="mb-5 flex items-end justify-between">
+                    <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <h2 className="font-serif text-2xl text-stone-900">
                             Preparation kits
                         </h2>
 
                         {!isLoading && !isError && kits.length > 0 && (
                             <span className="font-mono text-xs text-stone-400">
-                                {String(kits.length).padStart(2,"0")} total
+                                {String(kits.length).padStart(2, "0")} total
                             </span>
                         )}
                     </div>
 
+                    {deleteError && (
+                        <div className="mb-4 flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                            <p className="text-sm text-red-700">
+                                {deleteError}
+                            </p>
+
+                            <button
+                                onClick={() => setDeleteError("")}
+                                className="self-start text-xs font-medium text-red-600 hover:text-red-800 sm:self-auto"
+                            >
+                                Dismiss
+                            </button>
+                        </div>
+                    )}
+
                     {isLoading && (
                         <div className="space-y-3">
-                            {[0,1,2].map((i) => (
+                            {[0, 1, 2].map((i) => (
                                 <div
                                     key={i}
-                                    className="h-20 animate-pulse rounded-2xl border border-stone-200 bg-white"
+                                    className="h-24 animate-pulse rounded-2xl border border-stone-200 bg-white"
                                 />
                             ))}
                         </div>
@@ -234,13 +282,20 @@ const Dashboard = () =>
 
                     {isError && (
                         <div className="rounded-2xl border border-red-200 bg-red-50 px-6 py-10 text-center">
-                            <p className="text-sm text-red-700">
+                            <p className="text-sm font-medium text-red-700">
                                 Unable to load your preparation kits.
                             </p>
 
                             <p className="mt-1 text-xs text-red-500">
-                                Check your connection and try refreshing the page.
+                                Check your connection and try again.
                             </p>
+
+                            <button
+                                onClick={() => refetch()}
+                                className="mt-5 rounded-full bg-stone-950 px-5 py-2.5 text-xs font-medium text-white transition-colors hover:bg-stone-800"
+                            >
+                                Try again
+                            </button>
                         </div>
                     )}
 
@@ -251,8 +306,9 @@ const Dashboard = () =>
                             </p>
 
                             <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-stone-500">
-                                Start with a job description and company website. We'll turn them
-                                into questions, flashcards and a preparation schedule.
+                                Start with a job description and company website.
+                                We'll turn them into questions, flashcards and a
+                                preparation schedule.
                             </p>
 
                             <button
@@ -267,14 +323,14 @@ const Dashboard = () =>
                     {!isLoading && !isError && kits.length > 0 && (
                         <div className="space-y-3">
 
-                            {kits.map((kit,i) => (
+                            {kits.map((kit, i) => (
                                 <div
                                     key={kit._id}
-                                    className="group flex w-full items-center gap-5 rounded-2xl border border-stone-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-stone-900 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)] sm:p-6"
+                                    className="group flex w-full items-center gap-4 rounded-2xl border border-stone-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-stone-900 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.25)] sm:gap-5 sm:p-6"
                                 >
 
                                     <span className="hidden font-mono text-xs text-stone-300 sm:block">
-                                        {String(i + 1).padStart(2,"0")}
+                                        {String(i + 1).padStart(2, "0")}
                                     </span>
 
                                     <button
@@ -308,13 +364,20 @@ const Dashboard = () =>
 
                                     <button
                                         onClick={() => handleDeleteKit(kit._id)}
-                                        className="flex-shrink-0 rounded-full px-3 py-2 text-xs text-stone-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                                        disabled={
+                                            isDeleting &&
+                                            deletingKitId === kit._id
+                                        }
+                                        className="flex-shrink-0 rounded-full px-3 py-2 text-xs text-stone-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                                     >
-                                        Delete
+                                        {isDeleting && deletingKitId === kit._id
+                                            ? "Deleting..."
+                                            : "Delete"}
                                     </button>
 
                                     <button
                                         onClick={() => navigate(`/kit/${kit._id}`)}
+                                        aria-label={`Open ${kit.kit?.role?.title || "preparation kit"}`}
                                         className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-500 transition-colors hover:bg-stone-950 hover:text-amber-400"
                                     >
                                         →
@@ -325,6 +388,7 @@ const Dashboard = () =>
 
                         </div>
                     )}
+
                 </div>
             </main>
         </div>
@@ -332,4 +396,3 @@ const Dashboard = () =>
 };
 
 export default Dashboard;
-

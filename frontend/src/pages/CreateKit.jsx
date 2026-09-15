@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -15,27 +14,91 @@ const CreateKit = () =>
 
     const navigate = useNavigate();
 
+    const clearError = () =>
+    {
+        if (error)
+        {
+            setError("");
+        }
+    };
+
+    const handleJdChange = (event) =>
+    {
+        setJd(event.target.value);
+        clearError();
+    };
+
+    const handleCompanyUrlChange = (event) =>
+    {
+        setCompanyUrl(event.target.value);
+        clearError();
+    };
+
+    const handleDaysChange = (event) =>
+    {
+        setDays(event.target.value);
+        clearError();
+    };
+
     const handleSubmit = async (event) =>
     {
         event.preventDefault();
         setError("");
+
+        const trimmedJd = jd.trim();
+        const trimmedCompanyUrl = companyUrl.trim();
+        const numericDays = Number(days);
+
+        if (!trimmedJd)
+        {
+            setError("Please paste the job description.");
+            return;
+        }
+
+        if (!trimmedCompanyUrl)
+        {
+            setError("Please enter the company website.");
+            return;
+        }
+
+        if (
+            !Number.isInteger(numericDays) ||
+            numericDays < 1 ||
+            numericDays > 60
+        )
+        {
+            setError("Preparation days must be a whole number between 1 and 60.");
+            return;
+        }
 
         try
         {
             const response = await createKit
             (
                 {
-                    jd,
-                    company_url: companyUrl,
-                    days: Number(days)
+                    jd: trimmedJd,
+                    company_url: trimmedCompanyUrl,
+                    days: numericDays
                 }
             ).unwrap();
+
+            if (!response?.kitId)
+            {
+                setError(
+                    "The preparation kit was created, but its ID was not returned."
+                );
+
+                return;
+            }
 
             navigate(`/kit/${response.kitId}`);
         }
         catch (error)
         {
-            setError(error?.data?.message || "Unable to create your preparation kit.");
+            setError(
+                error?.data?.message ||
+                "Unable to create your preparation kit."
+            );
         }
     };
 
@@ -52,7 +115,8 @@ const CreateKit = () =>
 
                     <button
                         onClick={() => navigate("/dashboard")}
-                        className="text-sm text-neutral-400 transition-colors hover:text-neutral-50"
+                        disabled={isLoading}
+                        className="text-sm text-neutral-400 transition-colors hover:text-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Dashboard
                     </button>
@@ -80,12 +144,28 @@ const CreateKit = () =>
                         </p>
 
                         {error && (
-                            <div className="mt-8 rounded-sm border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-400">
-                                {error}
+                            <div className="mt-8 rounded-sm border border-red-900/50 bg-red-950/30 px-4 py-4 text-sm text-red-400">
+                                <div className="flex items-start justify-between gap-4">
+                                    <p>
+                                        {error}
+                                    </p>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setError("")}
+                                        disabled={isLoading}
+                                        className="flex-shrink-0 text-xs text-red-500 transition-colors hover:text-red-300 disabled:opacity-50"
+                                    >
+                                        Dismiss
+                                    </button>
+                                </div>
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="mt-10 space-y-8">
+                        <form
+                            onSubmit={handleSubmit}
+                            className="mt-10 space-y-8"
+                        >
 
                             <div>
                                 <label
@@ -98,11 +178,12 @@ const CreateKit = () =>
                                 <textarea
                                     id="jd"
                                     value={jd}
-                                    onChange={(event) => setJd(event.target.value)}
+                                    onChange={handleJdChange}
                                     placeholder="Paste the complete job description here..."
                                     required
+                                    disabled={isLoading}
                                     rows={12}
-                                    className="mt-3 w-full resize-y border border-neutral-800 bg-neutral-900 px-4 py-4 text-sm leading-relaxed text-neutral-200 outline-none transition-colors placeholder-neutral-600 focus:border-emerald-500"
+                                    className="mt-3 w-full resize-y border border-neutral-800 bg-neutral-900 px-4 py-4 text-sm leading-relaxed text-neutral-200 outline-none transition-colors placeholder-neutral-600 focus:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
                                 />
 
                                 <p className="mt-2 text-xs text-neutral-600">
@@ -122,10 +203,11 @@ const CreateKit = () =>
                                     id="companyUrl"
                                     type="url"
                                     value={companyUrl}
-                                    onChange={(event) => setCompanyUrl(event.target.value)}
+                                    onChange={handleCompanyUrlChange}
                                     placeholder="https://www.company.com"
                                     required
-                                    className="mt-3 w-full border-b border-neutral-700 bg-transparent px-0 py-3 text-sm text-neutral-200 outline-none transition-colors placeholder-neutral-600 focus:border-emerald-500"
+                                    disabled={isLoading}
+                                    className="mt-3 w-full border-b border-neutral-700 bg-transparent px-0 py-3 text-sm text-neutral-200 outline-none transition-colors placeholder-neutral-600 focus:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
                                 />
                             </div>
 
@@ -142,10 +224,12 @@ const CreateKit = () =>
                                     type="number"
                                     min="1"
                                     max="60"
+                                    step="1"
                                     value={days}
-                                    onChange={(event) => setDays(event.target.value)}
+                                    onChange={handleDaysChange}
                                     required
-                                    className="mt-3 w-full border-b border-neutral-700 bg-transparent px-0 py-3 text-sm text-neutral-200 outline-none transition-colors focus:border-emerald-500"
+                                    disabled={isLoading}
+                                    className="mt-3 w-full border-b border-neutral-700 bg-transparent px-0 py-3 text-sm text-neutral-200 outline-none transition-colors focus:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
                                 />
 
                                 <p className="mt-2 text-xs text-neutral-600">
@@ -153,36 +237,48 @@ const CreateKit = () =>
                                 </p>
                             </div>
 
-                            <button
-                                type="submit"
-                                disabled={isLoading}
-                                className="flex w-full items-center justify-center gap-2 rounded-sm bg-neutral-50 px-5 py-3.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-52"
-                            >
-                                {isLoading && (
-                                    <svg
-                                        className="h-4 w-4 animate-spin"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                        />
+                            <div>
 
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                                        />
-                                    </svg>
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="flex w-full items-center justify-center gap-2 rounded-sm bg-neutral-50 px-5 py-3.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:min-w-52"
+                                >
+                                    {isLoading && (
+                                        <svg
+                                            className="h-4 w-4 animate-spin"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                            />
+
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                            />
+                                        </svg>
+                                    )}
+
+                                    {isLoading
+                                        ? "Building your kit…"
+                                        : "Build preparation kit"}
+                                </button>
+
+                                {isLoading && (
+                                    <p className="mt-3 text-xs text-neutral-600">
+                                        This may take a little while while the role and company are researched.
+                                    </p>
                                 )}
 
-                                {isLoading ? "Building your kit…" : "Build preparation kit"}
-                            </button>
+                            </div>
 
                         </form>
 
@@ -200,9 +296,11 @@ const CreateKit = () =>
                                 <p className="font-mono text-xs text-neutral-600">
                                     01
                                 </p>
+
                                 <p className="mt-1 text-sm font-medium text-neutral-200">
                                     Analyze the role
                                 </p>
+
                                 <p className="mt-1 text-xs leading-relaxed text-neutral-500">
                                     Requirements and job information are extracted from the JD.
                                 </p>
@@ -212,9 +310,11 @@ const CreateKit = () =>
                                 <p className="font-mono text-xs text-neutral-600">
                                     02
                                 </p>
+
                                 <p className="mt-1 text-sm font-medium text-neutral-200">
                                     Research the company
                                 </p>
+
                                 <p className="mt-1 text-xs leading-relaxed text-neutral-500">
                                     The company website and public interview information are researched.
                                 </p>
@@ -224,9 +324,11 @@ const CreateKit = () =>
                                 <p className="font-mono text-xs text-neutral-600">
                                     03
                                 </p>
+
                                 <p className="mt-1 text-sm font-medium text-neutral-200">
                                     Build your preparation
                                 </p>
+
                                 <p className="mt-1 text-xs leading-relaxed text-neutral-500">
                                     Questions, flashcards, coverage checks and a preparation schedule are generated.
                                 </p>
@@ -245,4 +347,3 @@ const CreateKit = () =>
 };
 
 export default CreateKit;
-

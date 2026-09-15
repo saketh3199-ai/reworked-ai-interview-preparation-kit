@@ -1,6 +1,22 @@
 const searchTavily = async (query) =>
 {
-    const response = await fetch("https://api.tavily.com/search",{method: "POST",headers:{"Content-Type": "application/json","Authorization": `Bearer ${process.env.TAVILY_API_KEY}`},body: JSON.stringify({query,search_depth: "basic",max_results: 5,include_answer: false}),signal: AbortSignal.timeout(10000)});
+    const response = await fetch("https://api.tavily.com/search",
+    {
+        method: "POST",
+        headers:
+        {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${process.env.TAVILY_API_KEY}`
+        },
+        body: JSON.stringify
+        ({
+            query,
+            search_depth: "basic",
+            max_results: 5,
+            include_answer: false
+        }),
+        signal: AbortSignal.timeout(10000)
+    });
 
     if (!response.ok)
     {
@@ -73,5 +89,26 @@ export const researchInterviews = async (company) =>
         }
     );
 
-    return {company,queries,results: usefulResults};
+    return {
+        company,
+        queries,
+        results: usefulResults,
+
+        summary:
+        {
+            query_count: queries.length,
+            source_count: usefulResults.length
+        },
+
+        sources: usefulResults.map
+        (
+            (result) =>
+            {
+                return {
+                    title: result.title,
+                    url: result.url
+                };
+            }
+        )
+    };
 };

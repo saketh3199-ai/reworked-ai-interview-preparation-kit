@@ -1,7 +1,7 @@
 import Kit from "../models/Kit.js";
 // import {extractRequirementsAndJobInfo} from "../services/requirementExtractor.js";
-// import {generateQuestionsForRequirements} from "../services/questionPipeline.js";
-// import {ensureCoverage} from "../services/coveragePipeline.js";
+import {generateQuestionsForRequirements} from "../services/questionPipeline.js";
+import {ensureCoverage} from "../services/coveragePipeline.js";
 // import {generateFlashcards} from "../services/flashcardGenerator.js";
 // import {allocateSchedule} from "../services/scheduleAllocator.js";
 // import { crawlCompany } from "../services/companyCrawler.js";
@@ -199,7 +199,7 @@ export const getKits = async (req, res) =>
 
 
 
-export const updateKit = async (req, res) =>
+export const updateKit = async (req,res) =>
 {
     try
     {
@@ -219,7 +219,15 @@ export const updateKit = async (req, res) =>
 
         if (role !== undefined)
         {
-            kit.kit.role = role;
+            kit.kit.role =
+            {
+                title: role.title || "",
+                seniority: role.seniority || "",
+                responsibilities: Array.isArray(role.responsibilities)? role.responsibilities: [],
+                requirements: Array.isArray(role.requirements)? role.requirements: []
+            };
+
+            kit.markModified("kit.role");
         }
 
         if (questions !== undefined)
@@ -230,6 +238,7 @@ export const updateKit = async (req, res) =>
             }
 
             kit.kit.questions = questions;
+            kit.markModified("kit.questions");
         }
 
         if (flashcards !== undefined)
@@ -240,26 +249,35 @@ export const updateKit = async (req, res) =>
             }
 
             kit.kit.flashcards = flashcards;
+            kit.markModified("kit.flashcards");
         }
 
         if (schedule !== undefined)
         {
             kit.kit.schedule = schedule;
+            kit.markModified("kit.schedule");
         }
 
         if (builder !== undefined)
         {
             kit.builder = builder;
+            kit.markModified("builder");
         }
-
 
         await kit.save();
 
-        res.json({message: "Kit updated successfully",kitId: kit._id});
+        res.json
+        (
+            {
+                message: "Kit updated successfully",
+                kitId: kit._id
+            }
+        );
     }
     catch (error)
     {
-        console.error("Update Kit error:", error);
+        console.error("Update Kit error:",error);
+
         res.status(500).json({message: "Server error"});
     }
 };

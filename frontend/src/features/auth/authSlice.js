@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const token = localStorage.getItem("jwt_token");
+const storedUser = localStorage.getItem("auth_user");
 
 const initialState =
 {
     token,
-    user: null,
+    user: storedUser ? JSON.parse(storedUser) : null,
     isAuthenticated: !!token
 };
 
@@ -18,6 +19,7 @@ const setCredReducer = (state,action) =>
     state.isAuthenticated = true;
 
     localStorage.setItem("jwt_token",token);
+    localStorage.setItem("auth_user",JSON.stringify(user));
 };
 
 const logoutReducer = (state) =>
@@ -27,6 +29,7 @@ const logoutReducer = (state) =>
     state.isAuthenticated = false;
 
     localStorage.removeItem("jwt_token");
+    localStorage.removeItem("auth_user");
 };
 
 
